@@ -32,7 +32,7 @@ namespace RecetasSLN.presentación
         {
             CargarIngredientes();
             //CargarTiposRecetas();
-            //ProximaReceta();
+            ProximaReceta();
             cboIngredientes.SelectedIndex = -1;
         }
 
@@ -90,6 +90,7 @@ namespace RecetasSLN.presentación
         private void GuardarReceta()
         {
             Receta receta = new Receta();
+            receta.IdReceta = Convert.ToInt32(lblNroReceta.Text);
             receta.Nombre= txtNombre.Text;
             receta.Cheff= txtCheff.Text;
             receta.TipoReceta = cboTipoReceta.SelectedIndex;
@@ -113,21 +114,20 @@ namespace RecetasSLN.presentación
                 dgvIngredientes.Focus();
                 return;
             }
-            if(txtCantidad.Text==string.Empty)
+            if(nudCantidad.Value==0)
             {
                 MessageBox.Show("Ingrese una cantidad", "Control", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                txtCantidad.Focus();
+                nudCantidad.Focus();
                 return;
             }
-            //foreach (DataGridViewRow row in dgvIngredientes.Rows)
-            //{
-            //    if (row.Cells["colIngrediente"].Value.ToString().Equals(cboIngredientes.Text));
-            //    {
-            //        MessageBox.Show("Ese ingrediente ya está en la lista", "Control", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-            //        cboIngredientes.Focus();
-            //        return;
-            //    }
-            //}
+            foreach (DataGridViewRow row in dgvIngredientes.Rows)
+            {
+                if (row.Cells["colIngrediente"].Value.ToString().Equals(cboIngredientes.Text)) 
+                {
+                    MessageBox.Show("Ese ingrediente ya está en la lista", "Control", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+            }
 
             DataRowView item = (DataRowView)cboIngredientes.SelectedItem;
 
@@ -137,10 +137,10 @@ namespace RecetasSLN.presentación
 
             DetalleReceta detalle = new DetalleReceta();
             detalle.Ingrediente = ingrediente;
-            detalle.Cantidad = Convert.ToInt32(txtCantidad.Text);
+            detalle.Cantidad = (double)nudCantidad.Value;
             oReceta.AgregarDetalle(detalle);
 
-            dgvIngredientes.Rows.Add(new object[] { item.Row.ItemArray[0], item.Row.ItemArray[1], txtCantidad.Text });
+            dgvIngredientes.Rows.Add(new object[] { item.Row.ItemArray[0], item.Row.ItemArray[1], nudCantidad.Value });
 
             CalcularTotal();
             

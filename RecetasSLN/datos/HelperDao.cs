@@ -77,7 +77,7 @@ namespace RecetasSLN.datos
                 SqlCommand comando = new SqlCommand("SP_INSERTAR_RECETA",conexion,t);
                 comando.CommandType= CommandType.StoredProcedure;
 
-
+            //comando.Parameters.AddWithValue("@id_receta", oReceta.IdReceta);
                 comando.Parameters.AddWithValue("@nombre", oReceta.Nombre);
                 comando.Parameters.AddWithValue("@cheff", oReceta.Cheff);
                 comando.Parameters.AddWithValue("@tipo_receta", oReceta.TipoReceta);
